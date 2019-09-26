@@ -88,7 +88,6 @@ void delete(int value){
 		if(ptr->value == value){
 			if(ptr == head){
 				head = ptr->next;
-				//ptr = ptr->next;
 			}else{
 				prev->next = ptr->next;
 			}
