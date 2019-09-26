@@ -88,12 +88,17 @@ void delete(int value){
 		if(ptr->value == value){
 			if(ptr == head){
 				head = ptr->next;
-				ptr = ptr->next;
+				//ptr = ptr->next;
 			}else{
 				prev->next = ptr->next;
 			}
-			//look at delte call for why count is here
+			//look at delete call for why count is here
 			count = count - 1;
+			if(count == 0){
+				head = NULL;
+				break;
+			}
+
 		}else{
 			/*
 				only want to iterate prev if we dont delete
@@ -103,7 +108,7 @@ void delete(int value){
 			prev = ptr;
 		}
 		ptr = ptr->next;
-	}
+	}//end of WHILE LOOP
 }
 
 int main(int argc, char** argv){
@@ -125,7 +130,7 @@ int main(int argc, char** argv){
 	//int count = 0;
 	while(fscanf(fp, "%c\t%d\n", &c, &num) > 0){
 		//printf("Inserting: %d\n", num);
-		printf("This is the read character: %c\n",c);
+		//printf("This is the read character: %c\n",c);
 		if(c == 'i'){
 			insert(num);
 			//we can iterate count here bc we are only adding one item at a time
