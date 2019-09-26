@@ -41,6 +41,10 @@ void insert(int value){
 				*/
 				break;
 			}
+			if(ptr->value == value){
+				return;
+			}
+
 			//Just iterating
 			prev = ptr;
 			ptr = ptr->next;
@@ -50,10 +54,11 @@ void insert(int value){
 			head = temp;
 		}else{
 			prev->next = temp;
-			temp->next = ptr;			
+			temp->next = ptr;		
 		}
-
 	}
+	//add to count here bc otherwise we technically add to the count when trying to add duplicates
+	count = count + 1;
 
 	//temp->next = head;
 	//head = temp;
@@ -133,7 +138,7 @@ int main(int argc, char** argv){
 		if(c == 'i'){
 			insert(num);
 			//we can iterate count here bc we are only adding one item at a time
-			count = count + 1;
+			//count = count + 1;
 		}
 		if(c == 'd'){
 			//cannot decrement count here bc we can delete muliple nodes at once
