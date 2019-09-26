@@ -25,12 +25,33 @@ void print_list(){
 void insert(int value){
 	struct node* temp = malloc(sizeof(struct node)); //making space for a node
 	temp->value = value;
-	struct node* ptr = head;
-	while(ptr->next != NULL){
-		ptr = ptr->next;
-	}
+	temp->next = NULL;
 
-	ptr->next = temp;
+	if(head == NULL){
+		head = temp;
+	} else{
+		struct node* ptr = head;
+		struct node* prev = NULL;
+		while(ptr != NULL){
+			if(ptr->value > temp->value){
+				/*if we find a node that has 
+					a greater value then break
+				*/
+				break;
+			}
+			//Just iterating
+			prev = ptr;
+			ptr = ptr->next;
+		}
+		if(prev == NULL){
+			temp->next = ptr;
+			head = temp;
+		}else{
+			prev->next = temp;
+			temp->next = ptr;			
+		}
+
+	}
 
 	//temp->next = head;
 	//head = temp;
@@ -38,10 +59,16 @@ void insert(int value){
 	/*
 		IN JAVA
 		private void insert(int value){
+
+			
 			Node n = new Node(5, null);
 			Node ptr = head;
 			while(ptr.next != null){
 				ptr = ptr.next;
+			}
+
+			if (head == null){
+				head = temp;
 			}
 
 			ptr.next = n;
@@ -52,7 +79,17 @@ void insert(int value){
 }
 
 void delete(int value){
+	struct node* ptr = head;
+	struct node* prev = NULL;
 
+	while(ptr != NULL){
+		if(ptr->value == value){
+			prev->next = ptr->next;
+		}else{
+			prev = ptr;
+		}
+		ptr = ptr->next;
+	}
 }
 
 int main(int argc, char** argv){
@@ -77,6 +114,9 @@ int main(int argc, char** argv){
 		printf("This is the read character: %c\n",c);
 		if(c == 'i'){
 			insert(num);
+		}
+		if(c == 'd'){
+			delete(num);
 		}
 		//count = count + 1;
 	}
