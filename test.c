@@ -7,6 +7,8 @@ struct node{
 };
 
 struct node* head = NULL;
+int count = 0;
+
 void insert(int value);
 void delete(int value);
 void print_list();
@@ -14,7 +16,7 @@ void print_list();
 void print_list(){
 	struct node* temp = head;
 	while(temp != NULL){
-		printf("%d --> ", temp->value);
+		printf("%d ", temp->value);
 		temp = temp->next;
 	}	
 	printf("\n");
@@ -84,8 +86,20 @@ void delete(int value){
 
 	while(ptr != NULL){
 		if(ptr->value == value){
-			prev->next = ptr->next;
+			if(ptr == head){
+				head = ptr->next;
+				ptr = ptr->next;
+			}else{
+				prev->next = ptr->next;
+			}
+			//look at delte call for why count is here
+			count = count - 1;
 		}else{
+			/*
+				only want to iterate prev if we dont delete
+				otherwise we'll be setting prev to the node
+				we have just deleted
+			*/
 			prev = ptr;
 		}
 		ptr = ptr->next;
@@ -101,7 +115,7 @@ int main(int argc, char** argv){
 	
 	FILE* fp = fopen(argv[1], "r");
 	if(fp == NULL){
-		printf("file does not exist\n");
+		printf("error\n");
 		exit(0);
 	}
 
@@ -114,14 +128,17 @@ int main(int argc, char** argv){
 		printf("This is the read character: %c\n",c);
 		if(c == 'i'){
 			insert(num);
+			//we can iterate count here bc we are only adding one item at a time
+			count = count + 1;
 		}
 		if(c == 'd'){
+			//cannot decrement count here bc we can delete muliple nodes at once
 			delete(num);
 		}
-		//count = count + 1;
 	}
 
-	//printf("This is the number of items: %d\n", count);
+	//This is the number of items: 
+	printf("%d\n", count);
 
 	fclose(fp);
 	
