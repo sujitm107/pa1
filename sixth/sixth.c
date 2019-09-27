@@ -4,47 +4,38 @@
 
 int main(int argc, char** argv){
 
-	 //char vowels[] = {'a', 'e', 'i', 'o', 'u'};
+	 char vowels[] = {'a', 'e', 'i', 'o', 'u'};
 
-	// for(int i = 0; i<argc; ++i){
-	// 	printf("%lu ", strlen(argv[i]));
-	// 	printf("%s\n", argv[i]);
-	// }
-
-	// for(int i = 0; i<5; ++i){
-	// 	printf("%c\t", vowels[i]);
-	// }
-
-	// printf("\n");
-
-	
 	for(int i = 1; i<argc; ++i){
-		char* x = malloc(1*sizeof(char));
-		x = argv[i];
 
-		//printf("%s----> current string\n", x);
 
-		int swv = -1;
+		char * str = argv[i];
 
-		// for(int i = 0; i<strlen(x); ++i){
-		// 	if(x[0] == vowels[i]){
-		// 		swv = 0;
-		// 		break;
-		// 	}
-		// }
+		char temp = str[0];
 
-		printf("%d", swv);
+		for(int j = 1; j<strlen(str); ++j){
+			str[j-1] = str[j];
+		}
 
-		// if(swv == 0){
-		// 	strcat(x, "yay");
-		// } else{
-		strcat(x, "ay");
+		str[strlen(str)-1] = temp;
 
-		printf("%s\n", x);
+		printf("%s", str);
+
+		for(int i = 0; i<5; ++i){
+			if(temp == vowels[i]){
+				printf("yay ");
+				break;
+			} else if (i == 4){
+				printf("ay ");
+			}
+		}
+
+
+
+
 	}
 
 	printf("\n");
-
 
 
 }
