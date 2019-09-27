@@ -1,6 +1,8 @@
 #include<stdlib.h>
 #include<stdio.h>
 
+//This is the second project
+
 struct node{
 	int value;
 	struct node* next;
