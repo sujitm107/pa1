@@ -27,6 +27,8 @@ char* shift(char* str){
 	}
 	str[strlen(str)-1] = temp;
 
+	//printf("%s ---> right before sending back\n", str);
+
 	return str;
 
 }
@@ -50,7 +52,7 @@ int main(int argc, char** argv){
 				/* we just shifted but we don't know 
 					if the first letter is a vowel, so restart
 				*/
-				i = 0;
+				i = -1;
 			}
 		}
 
