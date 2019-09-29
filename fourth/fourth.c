@@ -3,14 +3,13 @@
 
 /*Can only multiply: the number of cols in the first matrix must equal 
 the number of rows inthe second matrix
-
 	Answer Matrix: the number rows of the first 
 	matrix by the number of cols in the second matrix
-
 */
 void printArray(int** arr, int rows, int cols);
 int** allocate_array(int, int);
 int** multiply(int**, int**, int, int, int, int);
+void free_array(int**, int);
 
 int** allocate_array(int rows, int cols){
 	int** arr = malloc(rows * sizeof(int*));
@@ -27,7 +26,6 @@ int** multiply(int** aOne, int** aTwo, int colsOne, int rowsTwo, int colsTwo, in
 	int** product = allocate_array(rowsOne, colsTwo);
 
 	if(colsOne != rowsTwo){
-		printf("bad-matrix\n");
 		return NULL;
 	}
 	//if past here colsOne == rowsTwo, so you can use them interchangbly
@@ -45,6 +43,18 @@ int** multiply(int** aOne, int** aTwo, int colsOne, int rowsTwo, int colsTwo, in
 	}
 
 	return product;
+}
+
+void free_array(int** arr, int rows){
+
+	for(int i = 0; i< rows; i++){
+		free(arr[i]);	
+	}
+
+	printf("freeing array\n");
+
+	free(arr);
+
 }
 
 
@@ -110,8 +120,17 @@ int main(int argc, char** argv){
 	int** product;
 
 	product = multiply(aOne, aTwo, colsOne, rowsTwo, colsTwo, rowsOne);
+	
+	if(product == NULL){
+		printf("bad-matrices\n");
+	}
+	else{
+		printArray(product, rowsOne, colsTwo);
+		free_array(product, rowsOne);
+	}
 
-	printArray(product, rowsOne, colsTwo);
+	 free_array(aOne, rowsOne);
+	 free_array(aTwo, rowsTwo);
 
 	return 0;
 }
