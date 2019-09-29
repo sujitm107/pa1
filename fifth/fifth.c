@@ -5,6 +5,8 @@ void printArray(int** arr, int size);
 
 int isMagic(int**, int, int);
 
+void free_array(int** , int );
+
 int isMagic(int** arr, int size, int magicNum){
 
 	for(int i = 0; i<size; i++){
@@ -35,6 +37,18 @@ int isMagic(int** arr, int size, int magicNum){
 
 
 	return 0;
+}
+
+void free_array(int** arr, int rows){
+
+	for(int i = 0; i< rows; i++){
+		free(arr[i]);	
+	}
+
+	//printf("freeing array");
+
+	free(arr);
+
 }
 
 int main(int argc, char** argv){
@@ -120,6 +134,10 @@ int main(int argc, char** argv){
 	} else{
 		printf("not-magic\n");
 	}
+
+	free(present);
+
+	free_array(arr, size);
 
 	//printArray(arr, size);
 

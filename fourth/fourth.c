@@ -51,7 +51,7 @@ void free_array(int** arr, int rows){
 		free(arr[i]);	
 	}
 
-	printf("freeing array\n");
+	//printf("freeing array\n");
 
 	free(arr);
 
