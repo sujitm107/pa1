@@ -42,16 +42,22 @@ int main(int argc, char** argv){
 
 		char * str = argv[i];
 		char temp = str[0];
+		int count = 0;
 
 		for(int i = 0; i<10; ++i){
+			if(count == strlen(str)){
+				break;
+			}
 			if(str[0] == vowels[i]){
 				break;
 			}else if(i == 9){
 				//here: it means that the first letter is not a vowel
 				str = shift(str);
+				count = count + 1;
 				/* we just shifted but we don't know 
 					if the first letter is a vowel, so restart
 				*/
+
 				i = -1;
 			}
 		}

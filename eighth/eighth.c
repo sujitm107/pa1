@@ -7,12 +7,22 @@ void print_tree(struct treenode*);
 struct treenode
 {
 	int value;
-	node* right;
-	node* left;
+	struct treenode* right;
+	struct treenode* left;
 	
 };
 
-struct
+void insert(int value){
+	struct treenode* temp = allocate_treenode(value);
+
+	//struct treenode* ptr = root;
+	while(ptr != null){
+		
+	}
+
+	/*running binary search*/
+
+}
 
 struct treenode* allocate_treenode(int value){
 
@@ -46,9 +56,15 @@ int main(int argc, char** argv){
 //READING FILE TO COMPLETION
 	while(fscanf(fp, "%c\t%d\n", &c, &num) > 0){
 		printf("%c\t%d\n",c,num);
+		if(root == NULL){
+			root = allocate_treenode(num);
+		}
+
 
 	}
 	fclose(fp);
+
+	printf("this is the value of the root: %d\n", root->value);
 
 
 }
