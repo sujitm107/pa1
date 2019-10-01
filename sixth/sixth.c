@@ -46,7 +46,7 @@ int main(int argc, char** argv){
 
 		for(int i = 0; i<10; ++i){
 			if(count == strlen(str)){
-				break;
+				break; //will break if we fully traverse a word, this means there are no vowels
 			}
 			if(str[0] == vowels[i]){
 				break;
