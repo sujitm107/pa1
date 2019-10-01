@@ -74,15 +74,37 @@ struct treenode* search(struct treenode* root, int value){
 
 int delete(int value){
 
+	//getting element, if it exists
 	struct treenode* deleteElement = search(root, value);
+
+	//if element does not exist
 	if(deleteElement == NULL){
 		return -1;
 	}
 
-	struct treenode* ptr = deleteElement;
+	struct treenode* ptr = root;
 	struct treenode* parent = NULL;
 
-	if(deleteElement->left == NULL && deleteElement->right == NULL){
+	while(ptr != NULL){ 
+	/*should never really go to null because we already checked
+		if the element exists */
+		if(value == ptr->value){ //we found the element so we can stop looping
+			break;
+		}
+		parent = ptr;
+		//storing parent, will not have parent if value is the root
+
+		if(value < ptr->value){
+			ptr = ptr->left;
+		} else {
+			ptr = ptr->right;
+		}
+	}
+
+	//printf("Value of parent: %d\n", parent->value);
+
+//CASE 3
+	if(deleteElement->left != NULL && deleteElement->right != NULL){
 		//TWO CHILDREN
 		parent = ptr;
 		ptr = ptr->right;
@@ -93,31 +115,35 @@ int delete(int value){
 		}
 		deleteElement->value = ptr->value;
 		deleteElement = ptr;
+		//printf("value we are using to override: %d\n", ptr->value);
 	}
-	//parent->left = NULL;
 
+	//CASE 2
 	if(parent == NULL){
 		if(deleteElement->left != NULL){
 			root = deleteElement->left;
-		} else{
+		} else {
 			root = deleteElement->right;
 		}
 	}
 
-	if(deleteElement == parent->right){
-		if(deleteElement->left != NULL){
-			parent->right = deleteElement->left;
-		} else{
-			parent->right = deleteElement->right;
-		}
-	} else {
+	//CASE 2 only one child
+	if(parent->left == deleteElement){
 		if(deleteElement->left != NULL){
 			parent->left = deleteElement->left;
 		} else{
 			parent->left = deleteElement->right;
 		}
-
+	} else { //parent->right == deleteElement
+		if(deleteElement->left != NULL){
+			parent->right = deleteElement->left;
+		} else {
+			parent->right = deleteElement->right;
+		}
 	}
+
+	//printf("Element we are deleteing: %d\n", ptr->value);
+
 
 	if(search(root, value) == NULL){
 		return 0;
@@ -126,6 +152,19 @@ int delete(int value){
 	}
 
 	/*
+BSTNode<T> x=root, p=null;
+		while (x != null) {
+			int c = item.compareTo(x.data);
+			if (c == 0) {
+				break;
+			}
+			p = x;
+			x = c < 0 ? x.left : x.right;
+		}
+		if (x == null) {
+			throw new NoSuchElementException(item + " not found");
+		}
+		
 		T temp = x.data; // to be returned at end of method
 		// Case 3
 		if (x.left != null && x.right != null) {
@@ -154,7 +193,7 @@ int delete(int value){
 			p.left = x.left != null ? x.left : x.right;
 		}
 		size--;
-		return temp;
+		return temp;	
 
 	*/
 
@@ -206,9 +245,11 @@ int main(int argc, char** argv){
 	}
 	fclose(fp);
 
-	print_tree(root);
+	//print_tree(root);
 
 	free_tree(root);
+
+	//printf("breaking in free tree\n");
 
 }
 
