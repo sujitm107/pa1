@@ -3,9 +3,10 @@
 
 struct treenode* allocate_treenode(int );
 void print_tree(struct treenode*);
-int search(struct treenode*, int, int);
-int insert(int value);
-int delete(int value);
+struct treenode* search(struct treenode*, int);
+int insert(int );
+int delete(int);
+void free_tree(struct treenode*);
 
 struct treenode* root = NULL;
 
@@ -23,13 +24,13 @@ int insert(int value){
 
 	struct treenode* prev = NULL;
 	struct treenode* ptr = root;
-	int height = 1;
 
 	while(ptr != NULL){
 		/*running binary search*/
-		height = height + 1;
+		temp->height = temp->height + 1;
 		if(ptr->value == value){
 			//printf("duplicate");
+			free(temp);
 			return -1;
 		}
 		prev = ptr;
@@ -42,36 +43,124 @@ int insert(int value){
 
 	if(prev == NULL){
 		root = temp;
-		return height;
+		return temp->height;
 	}
 	if(value < prev->value){
 		prev->left = temp;
-		return height;
+		return temp->height;
 	} else {
 		prev->right = temp;
-		return height;
+		return temp->height;
 	}
 
 }
 
-int search(struct treenode* root, int value, int height){
+struct treenode* search(struct treenode* root, int value){
 	if(root == NULL){
-		return -1;
+		// if we cannot find the value
+		return NULL;
 	}
 	if(value == root->value){
-		return height;
+		//printf("this is the node's height: %d\n", root->height);
+		return root;
 	}
 	if(value<root->value){
-		return search(root->left, value, height+1);
+		return search(root->left, value);
 	} else{
-		return search(root->right, value, height+1);
+		return search(root->right, value);
 	}
 
 }
 
 int delete(int value){
 
+	struct treenode* deleteElement = search(root, value);
+	if(deleteElement == NULL){
+		return -1;
+	}
+
+	struct treenode* ptr = deleteElement;
+	struct treenode* parent = NULL;
+
+	if(deleteElement->left == NULL && deleteElement->right == NULL){
+		//TWO CHILDREN
+		parent = ptr;
+		ptr = ptr->right;
+
+		while(ptr->left != NULL){
+			parent = ptr;
+			ptr = ptr->left;
+		}
+		deleteElement->value = ptr->value;
+		deleteElement = ptr;
+	}
+	//parent->left = NULL;
+
+	if(parent == NULL){
+		if(deleteElement->left != NULL){
+			root = deleteElement->left;
+		} else{
+			root = deleteElement->right;
+		}
+	}
+
+	if(deleteElement == parent->right){
+		if(deleteElement->left != NULL){
+			parent->right = deleteElement->left;
+		} else{
+			parent->right = deleteElement->right;
+		}
+	} else {
+		if(deleteElement->left != NULL){
+			parent->left = deleteElement->left;
+		} else{
+			parent->left = deleteElement->right;
+		}
+
+	}
+
+	if(search(root, value) == NULL){
+		return 0;
+	} else{
+		return -1;
+	}
+
+	/*
+		T temp = x.data; // to be returned at end of method
+		// Case 3
+		if (x.left != null && x.right != null) {
+			// find inorder predecessor of x
+			BSTNode<T> y = x.left;  // left turn
+			p = x;
+			// right turns until dead end
+			while (y.right != null) {
+				p = y;
+				y = y.right;
+			}
+			x.data = y.data;  // copy y into x
+			x = y; // reset y to drop into case 1 or case 2
+		}
+		
+		if (p == null) {
+			root = x.left != null ? x.left : x.right; // case 1 and 2
+			size--;
+			return temp;
+		}
+		
+		// works for case 2 (two combos) and case 2 (4 combos)
+		if (x == p.right) {
+			p.right = x.left != null ? x.left : x.right;
+		} else {
+			p.left = x.left != null ? x.left : x.right;
+		}
+		size--;
+		return temp;
+
+	*/
+
 }
+
+
 
 int main(int argc, char** argv){
 	
@@ -99,21 +188,25 @@ int main(int argc, char** argv){
 			}
 		}
 		if(c == 's'){
-			int height = search(root, num, 1);
-			if( height > 0){
-				printf("present %d\n", height);
+			struct treenode* searchedElement = search(root, num);
+			if( searchedElement != NULL){
+				printf("present %d\n", searchedElement->height);
 			} else{
 				printf("absent\n");
 			}
 		}
-
 		if(c == 'd'){
-
+			if(delete(num) == 0){
+				printf("success\n");
+			} else {
+				printf("fail\n");
+			}
 		}
-
 
 	}
 	fclose(fp);
+
+	print_tree(root);
 
 	free_tree(root);
 
@@ -127,16 +220,14 @@ void print_tree(struct treenode* root){
   print_tree(root->right);
 }
 
+//USING POST-ORDER TRAVERSAL
 void free_tree(struct treenode* root){
-
 	if(root == NULL){
 		return;
 	}
-
 	free_tree(root->left);
 	free_tree(root->right);
 	free(root);
-
 }
 
 struct treenode* allocate_treenode(int value){

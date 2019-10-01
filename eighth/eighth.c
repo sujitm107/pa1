@@ -3,8 +3,9 @@
 
 struct treenode* allocate_treenode(int );
 void print_tree(struct treenode*);
-int search(struct treenode*, int, int);
+struct treenode* search(struct treenode*, int);
 int insert(int value);
+void free_tree(struct treenode*);
 
 struct treenode* root = NULL;
 
@@ -53,20 +54,21 @@ int insert(int value){
 
 }
 
-int search(struct treenode* root, int value, int height){
+struct treenode* search(struct treenode* root, int value){
 	if(root == NULL){
 		// if we cannot find the value
-		return -1;
+		return NULL;
 	}
 
 	if(value == root->value){
-		return height;
+		//printf("this is the node's height: %d\n", root->height);
+		return root;
 	}
 
 	if(value<root->value){
-		return search(root->left, value, height+1);
+		return search(root->left, value);
 	} else{
-		return search(root->right, value, height+1);
+		return search(root->right, value);
 	}
 
 }
@@ -111,9 +113,9 @@ int main(int argc, char** argv){
 			}
 		}
 		if(c == 's'){
-			int height = search(root, num, 1);
-			if( height > 0){
-				printf("present %d\n", height);
+			struct treenode* searchedElement = search(root, num);
+			if( searchedElement != NULL){
+				printf("present %d\n", searchedElement->height);
 			} else{
 				printf("absent\n");
 			}
