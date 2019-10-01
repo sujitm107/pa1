@@ -81,14 +81,16 @@ int delete(int value){
 	if(deleteElement == NULL){
 		return -1;
 	}
-
 	struct treenode* ptr = root;
 	struct treenode* parent = NULL;
+
+
 
 	while(ptr != NULL){ 
 	/*should never really go to null because we already checked
 		if the element exists */
 		if(value == ptr->value){ //we found the element so we can stop looping
+			//printf("entering here\n");
 			break;
 		}
 		parent = ptr;
@@ -100,6 +102,8 @@ int delete(int value){
 			ptr = ptr->right;
 		}
 	}
+
+
 
 	//printf("Value of parent: %d\n", parent->value);
 
@@ -120,10 +124,14 @@ int delete(int value){
 
 	//CASE 2
 	if(parent == NULL){
+
+		//printf("should be entering\n");
 		if(deleteElement->left != NULL){
 			root = deleteElement->left;
+			return 0;
 		} else {
-			root = deleteElement->right;
+			root = deleteElement->right;;
+			return 0;
 		}
 	}
 
@@ -142,60 +150,13 @@ int delete(int value){
 		}
 	}
 
-	//printf("Element we are deleteing: %d\n", ptr->value);
-
+	//printf("Sending back");
 
 	if(search(root, value) == NULL){
 		return 0;
 	} else{
 		return -1;
 	}
-
-	/*
-BSTNode<T> x=root, p=null;
-		while (x != null) {
-			int c = item.compareTo(x.data);
-			if (c == 0) {
-				break;
-			}
-			p = x;
-			x = c < 0 ? x.left : x.right;
-		}
-		if (x == null) {
-			throw new NoSuchElementException(item + " not found");
-		}
-		
-		T temp = x.data; // to be returned at end of method
-		// Case 3
-		if (x.left != null && x.right != null) {
-			// find inorder predecessor of x
-			BSTNode<T> y = x.left;  // left turn
-			p = x;
-			// right turns until dead end
-			while (y.right != null) {
-				p = y;
-				y = y.right;
-			}
-			x.data = y.data;  // copy y into x
-			x = y; // reset y to drop into case 1 or case 2
-		}
-		
-		if (p == null) {
-			root = x.left != null ? x.left : x.right; // case 1 and 2
-			size--;
-			return temp;
-		}
-		
-		// works for case 2 (two combos) and case 2 (4 combos)
-		if (x == p.right) {
-			p.right = x.left != null ? x.left : x.right;
-		} else {
-			p.left = x.left != null ? x.left : x.right;
-		}
-		size--;
-		return temp;	
-
-	*/
 
 }
 
@@ -222,6 +183,7 @@ int main(int argc, char** argv){
 			int height = insert(num);
 			if(height > 0){
 				printf("inserted %d\n", height);
+				//printf("This is the root: %d\n", root->value);
 			} else{
 				printf("duplicate\n");
 			}
@@ -245,7 +207,11 @@ int main(int argc, char** argv){
 	}
 	fclose(fp);
 
-	//print_tree(root);
+	print_tree(root);
+
+	// if(root != NULL){
+	// 	printf("%d\n", root->value);
+	// }
 
 	free_tree(root);
 
