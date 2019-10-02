@@ -106,6 +106,8 @@ int main(int argc, char** argv){
 		}
 	}
 
+	fclose(fp);
+
 	//int x = 14;
 
 	//printf("%d\n", hashfunction(x));

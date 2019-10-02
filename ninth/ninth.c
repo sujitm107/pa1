@@ -223,7 +223,7 @@ int main(int argc, char** argv){
 
 }
 
-//In PREORDER TRAVERSAL, so it should go lowest to highest
+//In INORDER TRAVERSAL, so it should go lowest to highest
 void print_tree(struct treenode* root){
   if(root == NULL) return;
   print_tree(root->left);
