@@ -3,7 +3,7 @@
 
 struct treenode* allocate_treenode(int );
 void print_tree(struct treenode*);
-struct treenode* search(struct treenode*, int);
+int search(struct treenode*, int, int);
 int insert(int );
 int delete(int);
 void free_tree(struct treenode*);
@@ -55,19 +55,19 @@ int insert(int value){
 
 }
 
-struct treenode* search(struct treenode* root, int value){
+int search(struct treenode* root, int value, int height){
 	if(root == NULL){
 		// if we cannot find the value
-		return NULL;
+		return -1;
 	}
 	if(value == root->value){
 		//printf("this is the node's height: %d\n", root->height);
-		return root;
+		return height;
 	}
 	if(value<root->value){
-		return search(root->left, value);
+		return search(root->left, value, height+1);
 	} else{
-		return search(root->right, value);
+		return search(root->right, value, height+1);
 	}
 
 }
@@ -75,10 +75,10 @@ struct treenode* search(struct treenode* root, int value){
 int delete(int value){
 
 	//getting element, if it exists
-	struct treenode* deleteElement = search(root, value);
+	int deleteElement = search(root, value, 1);
 
 	//if element does not exist
-	if(deleteElement == NULL){
+	if(deleteElement < 0){
 		return -1;
 	}
 	struct treenode* ptr = root;
@@ -103,12 +103,16 @@ int delete(int value){
 		}
 	}
 
+	//printf("value of pointer:---------------> %d\n", ptr->value);
+	//printf("value of deleteElement: %d\n", deleteElement->value);
 
+	struct treenode* temp = ptr;
+	//temp is set to element that is set to be deleted
 
 	//printf("Value of parent: %d\n", parent->value);
 
 //CASE 3
-	if(deleteElement->left != NULL && deleteElement->right != NULL){
+	if(ptr->left != NULL && ptr->right != NULL){
 		//TWO CHILDREN
 		parent = ptr;
 		ptr = ptr->right;
@@ -117,8 +121,8 @@ int delete(int value){
 			parent = ptr;
 			ptr = ptr->left;
 		}
-		deleteElement->value = ptr->value;
-		deleteElement = ptr;
+		temp->value = ptr->value;
+		temp = ptr;
 		//printf("value we are using to override: %d\n", ptr->value);
 	}
 
@@ -126,33 +130,33 @@ int delete(int value){
 	if(parent == NULL){
 
 		//printf("should be entering\n");
-		if(deleteElement->left != NULL){
-			root = deleteElement->left;
+		if(ptr->left != NULL){
+			root = ptr->left;
 			return 0;
 		} else {
-			root = deleteElement->right;;
+			root = ptr->right;;
 			return 0;
 		}
 	}
 
 	//CASE 2 only one child
-	if(parent->left == deleteElement){
-		if(deleteElement->left != NULL){
-			parent->left = deleteElement->left;
+	if(parent->left == ptr){
+		if(ptr->left != NULL){
+			parent->left = ptr->left;
 		} else{
-			parent->left = deleteElement->right;
+			parent->left = ptr->right;
 		}
-	} else { //parent->right == deleteElement
-		if(deleteElement->left != NULL){
-			parent->right = deleteElement->left;
+	} else { //parent->right == ptr
+		if(ptr->left != NULL){
+			parent->right = ptr->left;
 		} else {
-			parent->right = deleteElement->right;
+			parent->right = ptr->right;
 		}
 	}
 
 	//printf("Sending back");
 
-	if(search(root, value) == NULL){
+	if(search(root, value, 1) < 0){
 		return 0;
 	} else{
 		return -1;
@@ -189,9 +193,9 @@ int main(int argc, char** argv){
 			}
 		}
 		if(c == 's'){
-			struct treenode* searchedElement = search(root, num);
-			if( searchedElement != NULL){
-				printf("present %d\n", searchedElement->height);
+			int searchedElementHeight = search(root, num, 1);
+			if( searchedElementHeight > 0){
+				printf("present %d\n", searchedElementHeight);
 			} else{
 				printf("absent\n");
 			}
@@ -207,7 +211,7 @@ int main(int argc, char** argv){
 	}
 	fclose(fp);
 
-	print_tree(root);
+	//print_tree(root);
 
 	// if(root != NULL){
 	// 	printf("%d\n", root->value);
