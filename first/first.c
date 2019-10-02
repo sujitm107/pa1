@@ -2,24 +2,29 @@
 #include<stdio.h>
 
 
-int isRightPrime(int n);
+int isPrime(int n);
 
 int isPrime(int n){
 
-	if(n == 0 || n == 1){
+	if(n < 2 ){
 		return -1;
 	}
 
-	//printf("sending %d\n",n);
+
+	//printf("received: %d\n",n);
 	int temp = n;
+	//printf("this is temp: %d\n",temp);
 	while(temp > 0){
-		for(int i = 2; i<temp;i++){
+		for(int i = 2; i<(temp-1); i++){
 			if(temp%i == 0){
 				//returns -1 if not prime
 				return -1;
+				//printf("not prime\n");
 			}
 		}
 		temp = temp/10;
+		//printf("%d--->this is temp\n", temp);
+
 	}
 	
 	return 0;
@@ -66,11 +71,12 @@ int main(int argc, char** argv){
 	
 
 	for(int i = 0; i< num; i++){
-		int temp;
+		int temp = 0;
 		//v what is that line doing
-		fscanf(fp, "%d\n", &temp);
-
-		//printf("Receiving %d\n", isPrime(temp));
+		if(fscanf(fp, "%d\n", &temp) < 0){
+			break;
+		}
+		//printf("sending %d\n", temp);
 
 		if(isPrime(temp) == 0){
 			printf("yes\n");
